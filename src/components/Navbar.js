@@ -28,6 +28,8 @@ const Navbar = () => {
       <button className="btn btn-outline-success mx-2 my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
+
+ 
 </nav>
     </>
   )
