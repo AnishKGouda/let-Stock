@@ -46,7 +46,7 @@ const Gainloose = () => {
     diffarr[`${myObj[i]}`]=diff
     
   
-    if(gainers>2){
+    if(gainers>=3){
       break
     }  
     }
