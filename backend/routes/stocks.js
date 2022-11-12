@@ -7,8 +7,8 @@ const { body, validationResult } = require('express-validator');
 // ROUTE 1: Get All the Notes using: GET "/api/auth/getuser". Login required
 router.get('/fetchall', fetchuser, async (req, res) => {
     try {
-        const notes = await Stock.find({ user: req.user.id });
-        res.json(notes)
+        const stocks = await Stock.find({ user: req.user.id });
+        res.json(stocks)
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -17,7 +17,7 @@ router.get('/fetchall', fetchuser, async (req, res) => {
 
 // ROUTE 2: Add a new Note using: POST "/api/auth/addnote". Login required
 router.post('/addstock', fetchuser, [
-    body('title', 'Enter a valid title').isLength({ min: 3 }),
+    body('title', 'Enter a valid title'),
    ], async (req, res) => {
         try {
 
@@ -33,7 +33,7 @@ router.post('/addstock', fetchuser, [
             })
             const savedNote = await stock.save()
 
-            res.json(savedNote)
+            res.json(savedNote.title)
 
         } catch (error) {
             console.error(error.message);

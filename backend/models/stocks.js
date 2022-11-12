@@ -8,13 +8,11 @@ const stockSchema = new Schema({
     },
     title:{
         type: String,
-        required: true
-    },
-    
-    date:{
-        type: Date,
-        default: Date.now
-    },
+        required: true,
+        unique:true
+
+    }
+
   });
 
-  module.exports = mongoose.model('notes', stockSchema);
+  module.exports = mongoose.model('stocks', stockSchema);

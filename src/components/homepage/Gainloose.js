@@ -1,10 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 const Gainloose = () => {
+
+
+  let famous ={}
+
+  const host="http://localhost:3001"
+      const [stocks, setstock] = useState(famous)
+      //get all notes
+      const getstocks= async ()=>{
+
+        const response= await fetch(`${host}/api/stocks/fetchall`,
+        {
+          method:'GET',
+          headers:{"auth-token":localStorage.getItem('token')}
+        })
+        let json=await response.json()
+      //console.log(json)
+        let newjson={}
+      let counter=0
+        for (let i=0;i<json.length;i++){
+         // console.log(i) 
+          let value=json[i]
+            value= value["title"]   
+               
+           newjson[i]=value
+                
+         }
+         console.log(newjson)
+
+        setstock(newjson)
+        
+      
+       
+      }
+   
+  
   let gainers = 0;
-  let famous =
-    '{"0":"AAPL","1":"MSFT","2":"AMZN","3":"TSLA","4":"GOOGL","5":"GOOG","6":"BRK.B","7":"UNH","8":"JNJ","9":"XOM","10":"JPM","11":"META","12":"V","13":"PG","14":"NVDA","15":"HD","16":"CVX","17":"LLY","18":"MA","19":"ABBV","20":"PFE","21":"MRK","22":"PEP","23":"BAC","24":"KO"}';
-  const myObj = JSON.parse(famous);
+
+  //console.log(stocks)
+  const myObj =stocks
   //functions for getting dates
   function getCurrentDate(separator = "-") {
     let newDate = new Date();
@@ -45,7 +80,10 @@ const Gainloose = () => {
   //getting dates for data drilling
   let date = getCurrentDate();
   let ydate = getYesterdayDate();
+  
+  
   const fetchcompanies = async () => {
+    
     //for loop that jumps +5 ....api convienience
     for (let i = called; i <= Object.keys(myObj).length; i++) {
       gainers++;
@@ -97,25 +135,16 @@ const Gainloose = () => {
     });
     higharr = higharr.sort((a, b) => b - a);
 
-    let openkey = Object.keys(opennarr).sort(function (a, b) {
-      return opennarr[b] - opennarr[a];
-    });
-    openarr = openarr.sort((a, b) => b - a);
-
-    let closekey = Object.keys(closeearr).sort(function (a, b) {
-      return closeearr[b] - closeearr[a];
-    });
-    closearr = closearr.sort((a, b) => b - a);
-
     called += 5;
-
-
+    console.log(diffkey)
+    console.log(difvalue)
+   
    
   };
    
   
 
-  useEffect(() => {}, []);
+
 
   return (
     <div>
@@ -124,7 +153,10 @@ const Gainloose = () => {
         {" "}
         click
       </button>
-      <button className="btn-primary" onClick={getCurrentDate}></button>
+      <button className="btn-primary" onClick={getstocks}>to fetch from db</button>
+      
+
+
     </div>
   );
 };
