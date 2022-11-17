@@ -89,9 +89,9 @@ const Gainloose = () => {
    //have to put this function in a try catch to solve date error
 
   ///
-  
+
   const fetchcompanies = async () => {
-    
+    try{
     //for loop that jumps +5 ....api convienience
     for (let i = called; i < Object.keys(myObj).length; i++) {
       gainers++;
@@ -149,9 +149,9 @@ const Gainloose = () => {
    // console.log(difvalue)
    // console.log(volkey)
    // console.log(volarr)
-   
+   } catch{}
   };
-   
+
   
 
 
