@@ -16,12 +16,10 @@ router.get('/fetchall', fetchuser, async (req, res) => {
 })
 
 // ROUTE 2: Add a new Note using: POST "/api/auth/addnote". Login required
-router.post('/addstock', fetchuser, [
-    body('title', 'Enter a valid title'),
-   ], async (req, res) => {
+router.post('/addstock', fetchuser, async (req, res) => {
         try {
 
-            const { title } = req.body;
+            const { title,name } = req.body;
 
             // If there are errors, return Bad request and the errors
             const errors = validationResult(req);
@@ -29,7 +27,7 @@ router.post('/addstock', fetchuser, [
                 return res.status(400).json({ errors: errors.array() });
             }
             const stock = new Stock({
-                title, user: req.user.id
+                title,name, user: req.user.id
             })
             const savedNote = await stock.save()
 

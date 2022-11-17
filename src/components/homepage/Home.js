@@ -3,7 +3,8 @@ import React from 'react'
 import Logger from "./Logger"
 import './homepage.css'
 import Gainloose from "./Gainloose"
-import Add from "./Add"
+import News from "./News"
+
 const Home = () => {
 
   let token=localStorage.getItem("token")
@@ -12,8 +13,9 @@ const Home = () => {
   
    {!token?<Logger />:null}
     <div>Home</div>
-    <Add/>
+   
     <Gainloose/>
+    <News/>
     </div>
   )
 }

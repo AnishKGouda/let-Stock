@@ -1,51 +1,61 @@
-import React,{useState} from 'react'
+
+import e from 'cors';
+import React,{useState,useEffect} from 'react'
+import Searchele from './Searchele';
 
 const Add = () => {
-const [note,setnote]=useState({title:""})
-
+  let Data=[]
+  const [Results, setResults] = useState(Data)
+const [stock,setstock]=useState({searchbar:""})
 const onChange = (e) => {
-  setnote({ ...note, [e.target.name]: e.target.value });
-};
-
-
-const handle=(e)=>{
-  e.preventDefault();
-  addtodb(note.title);
-}
-    const addtodb=async(title)=>{
+  setstock({ ...stock, [e.target.name]: e.target.value });
+  search(e)
+  console.log(stock)
   
-     try{      const response = await fetch(`http://localhost:3001/api/stocks/addstock`, {
-      method: 'POST',
-      headers: {
-        "auth-token": localStorage.getItem('token'),
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({title})
-    })
+};
+useEffect(() => {
+  search(e)
+}, [])
     
-}
-     catch{}
+    const search=async(e)=>{
+      e.preventDefault()
 
+   const response= await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${stock.searchbar}&apikey=FS77N1CHBPTE25F5`)
+      let data= await response.json()
+         data=data['bestMatches'] 
+        // console.log(data.length)
+        for (let i in data ){
+          let newjson={}
+          let value=data[i]
+          let symbol= value["1. symbol"] 
+          let name=value["2. name"] 
+        //  console.log(symbol)  
+           newjson['symbol']=symbol
+           newjson['name']=name
+           Data.push(newjson)
+              
+         }
+         console.log(Data)
+         setResults(Data)
+ 
     }
-
-
-    const search=async()=>{
-     //   const response= await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${nsearchbar}&apikey=`)
-         console.log()
-   
-    }
-
 
     return (
-    <>
-      <form className="form-inline my-2  my-lg-0" onSubmit={search}>
-      <input className="form-control mr-sm-2" name="searchbar" type="search" placeholder="Search" aria-label="Search"/>
-      <button className="btn btn-outline-success mx-2 my-2 my-sm-0"  type="submit">Search</button>
+    <div className='container m-4'>
+      <form className="form-inline my-2  my-lg-0" >
+      <input className="form-control mr-sm-2" name="searchbar" id='searchbar' type="search" onChange={onChange} placeholder="Search" aria-label="Search"/>
+      <button className="btn btn-outline-success mx-2 my-2 my-sm-0" onClick={search} type="submit">Search</button>
     </form>
+ 
 
-    <input type="text" name="title" onChange={onChange}/>
-    <button className="btn-primary" onClick={handle}>add new stock</button>
-    </>
+    {Results.map((element) => {
+                            return <div className="col-md-4" key={element.symbol}>
+                                <Searchele symbol={element.symbol ? element.symbol : ""} name={element.name ? element.name : ""} />
+                            </div>
+                        })}
+    
+    {/* <button className="btn-primary" onClick={handle}>add new stock</button> */}
+    </div>
   )
 }
 

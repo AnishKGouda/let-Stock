@@ -4,6 +4,7 @@ const Gainloose = () => {
 
 
   let famous ={}
+  let stocknameobj={}
 
   const host="http://localhost:3001"
       const [stocks, setstock] = useState(famous)
@@ -16,19 +17,21 @@ const Gainloose = () => {
           headers:{"auth-token":localStorage.getItem('token')}
         })
         let json=await response.json()
-      //console.log(json)
+      console.log(json)
         let newjson={}
-      let counter=0
+    
         for (let i=0;i<json.length;i++){
          // console.log(i) 
           let value=json[i]
+          let name=value["name"] 
             value= value["title"]   
-               
+          
+           stocknameobj[value]=name
            newjson[i]=value
                 
          }
          console.log(newjson)
-
+        console.log(stocknameobj)
         setstock(newjson)
         
       
@@ -43,7 +46,7 @@ const Gainloose = () => {
   //functions for getting dates
   function getCurrentDate(separator = "-") {
     let newDate = new Date();
-    let date = newDate.getDate() - 1;
+    let date = newDate.getDate() - 2;
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
 
@@ -54,7 +57,7 @@ const Gainloose = () => {
 
   function getYesterdayDate(separator = "-") {
     let newDate = new Date();
-    let date = newDate.getDate() - 2;
+    let date = newDate.getDate() - 3;
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
 
@@ -79,13 +82,18 @@ const Gainloose = () => {
   let called = 0;
   //getting dates for data drilling
   let date = getCurrentDate();
+ // console.log(date)
   let ydate = getYesterdayDate();
-  
+  /////
+
+   //have to put this function in a try catch to solve date error
+
+  ///
   
   const fetchcompanies = async () => {
     
     //for loop that jumps +5 ....api convienience
-    for (let i = called; i <= Object.keys(myObj).length; i++) {
+    for (let i = called; i < Object.keys(myObj).length; i++) {
       gainers++;
       //fetching values
       let response = await fetch(
@@ -94,8 +102,9 @@ const Gainloose = () => {
       let data = await response.json();
 
       let value = data["Time Series (Daily)"][`${date}`]["4. close"];
+
       let yvalue = data["Time Series (Daily)"][`${ydate}`]["4. close"];
-      let vol = data["Time Series (Daily)"][`${date}`]["7. dividend amount"];
+      let vol = data["Time Series (Daily)"][`${date}`]["6. volume"];
       volarr.push(vol);
       let high = data["Time Series (Daily)"][`${date}`]["2. high"];
       higharr.push(high);
@@ -130,15 +139,16 @@ const Gainloose = () => {
     });
     volarr = volarr.sort((a, b) => b - a);
 
-    let highkey = Object.keys(highharr).sort(function (a, b) {
-      return highharr[b] - highharr[a];
-    });
-    higharr = higharr.sort((a, b) => b - a);
+    // let highkey = Object.keys(highharr).sort(function (a, b) {
+    //   return highharr[b] - highharr[a];
+    // });
+    // higharr = higharr.sort((a, b) => b - a);
 
     called += 5;
-    console.log(diffkey)
-    console.log(difvalue)
-   
+   console.log(diffkey)
+   // console.log(difvalue)
+   // console.log(volkey)
+   // console.log(volarr)
    
   };
    
