@@ -2,7 +2,18 @@ import React from 'react';
 import {
   Link
   } from "react-router-dom";
+import { useState } from "react";
 const Navbar = () => {
+   
+ let token=localStorage.getItem('token')
+
+  const logout=()=>{
+    localStorage.removeItem('token')
+    window.location.reload()
+
+  }
+
+
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,7 +34,10 @@ const Navbar = () => {
         <Link className="nav-link" to="/About">About</Link>
       </li>
     </ul>
-  
+    {token?
+  <button className="btn-primary" onClick={logout}>Logout</button>
+:null
+    }
   </div>
 
  

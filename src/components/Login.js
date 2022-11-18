@@ -19,10 +19,8 @@ const Login = (props) => {
     const json = await response.json();
     if (json.success) {
       localStorage.setItem("token", json.authToken);
-      navigate("/");
-      props.showalert("logged in succesfully","success")
+      window.location.replace("/");
     } else {
-      props.showalert("wrong credentials","danger")
     }
   };
   return (
