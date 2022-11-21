@@ -7,10 +7,13 @@ import Login from "./components/Login";
 import Signup
 
 from "./components/Signup";
+import StockState from "./components/StockState";
+import Stock from "./components/Stock";
 import Add from "./components/homepage/Add";
 const App = () => {
   return (
     <>
+    <StockState>
       <Router>
         <Navbar />
 
@@ -21,10 +24,13 @@ const App = () => {
             <Route path="/Login" element={<Login />} />
             <Route path="/Signup" element={<Signup />} />
            <Route path="/search" element={<Add/>}/>  
+           <Route path="/Stock" element={<Stock/>}/>
           </Routes>
         </div>
       </Router>
-    </>
+  
+      </StockState>
+        </>
   );
 };
 

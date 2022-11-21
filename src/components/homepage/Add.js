@@ -9,14 +9,11 @@ const Add = () => {
 const [stock,setstock]=useState({searchbar:""})
 const onChange = (e) => {
   setstock({ ...stock, [e.target.name]: e.target.value });
-//  search(e)
+  search(e)
   console.log(stock)
   
 };
-useEffect(() => {
-  search(e)
-}, [])
-    
+
     const search=async(e)=>{
       
      e.preventDefault();

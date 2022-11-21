@@ -7,12 +7,12 @@ import News from "./News"
 
 const Home = () => {
 
-  let token=localStorage.getItem("token")
+  let token=sessionStorage.getItem("token")
   return (
     <div className="homebody">
   
    {!token?<Logger />:null}
-    <div>Home</div>
+    <div></div>
    
     <Gainloose/>
     <News/>

@@ -1,53 +1,70 @@
-import React, { useEffect,useState } from "react";
-import Volume from "./Volume";
+import React, { useEffect, useState, useContext } from "react";
+import {  useNavigate } from "react-router-dom";
 
-import {
-  Link
-  } from "react-router-dom";
-const Gainloose = () => {
+import { Link } from "react-router-dom";
+import NoteContext from "../NoteContext";
+const Gainloose = (props) => {
+  const [diffkey, setdiffkey] = useState([]);
+  const [diffvalue, setdiffvalue] = useState([]);
+  const [volarr, setvolarr] = useState([]);
+  const [volkey, setvolkey] = useState([]);
 
+  let token=sessionStorage.getItem('token')
 
-  let famous ={}
- // let stocknameobj={}
+  useEffect(() => {
 
-  const host="http://localhost:3001"
-      const [stocks, setstock] = useState(famous)
-      const [stocknameobj,setstocknameobj]=useState({})
-      //get all notes
-      const getstocks= async ()=>{
-
-        const response= await fetch(`${host}/api/stocks/fetchall`,
-        {
-          method:'GET',
-          headers:{"auth-token":localStorage.getItem('token')}
-        })
-        let json=await response.json()
-      console.log(json)
-        let newjson={}
+    setdiffkey(JSON.parse(sessionStorage.getItem('diffkey')))
+    setdiffvalue(JSON.parse(sessionStorage.getItem('diffvalue')))
+    setvolkey(JSON.parse(sessionStorage.getItem('volkey')))
+    setvolarr(JSON.parse(sessionStorage.getItem('volarr')))
     
-        for (let i=0;i<json.length;i++){
-         // console.log(i) 
-          let value=json[i]
-          let name=value["name"] 
-            value= value["title"]   
-          
-           stocknameobj[value]=name
-           newjson[i]=value
-                
-         }
-         console.log(newjson)
-        console.log(stocknameobj)
-        setstock(newjson)
-        
-      
-       
-      }
    
+   getstocks()
+  }, [])
   
+  let navigate = useNavigate();
+  let context = useContext(NoteContext);
+  const { setindi ,setstockname } = context;
+  let famous = {};
+  // let stocknameobj={}
+
+  const host = "http://localhost:3001";
+  const [stocks, setstock] = useState(famous);
+  const [stocknameobj, setstocknameobj] = useState({});
+  //get all notes
+  const getstocks = async () => {
+    const response = await fetch(`${host}/api/stocks/fetchall`, {
+      method: "GET",
+      headers: { "auth-token": sessionStorage.getItem("token") },
+    })
+    let json={}
+if(token){  
+    json = await response.json();
+  }else{
+    json=[{"_id":"637675b481d6fa3760329804","user":"636e3ff818f443c9ae43279e","title":"TSLA","name":"Tesla Inc","__v":0},{"_id":"6376769081d6fa3760329806","user":"636e3ff818f443c9ae43279e","title":"AAPL","name":"Apple Inc","__v":0},{"_id":"6376769f81d6fa3760329808","user":"636e3ff818f443c9ae43279e","title":"APLE","name":"Apple Hospitality REIT Inc","__v":0},{"_id":"637676cd81d6fa376032980a","user":"636e3ff818f443c9ae43279e","title":"TATACHEM.BSE","name":"TATA CHEMICALS LTD.","__v":0},{"_id":"637676d281d6fa376032980c","user":"636e3ff818f443c9ae43279e","title":"TATACOMM.BSE","name":"TATA COMMUNICATIONS LTD.","__v":0},{"_id":"6377c07547ad0b6a9b8f2773","user":"636e3ff818f443c9ae43279e","title":"TESS","name":"Tessco Technologies Inc","__v":0}]
+  }
+    console.log(json);
+    let newjson = {};
+
+    for (let i = 0; i < json.length; i++) {
+  
+      let value = json[i];
+      let name = value["name"];
+      value = value["title"];
+
+      stocknameobj[value] = name;
+      newjson[i] = value;
+    }
+    console.log(newjson);
+    console.log(stocknameobj);
+
+    setstock(newjson);
+  };
+
   let gainers = 0;
 
-  //console.log(stocks)
-  const myObj =stocks
+
+  const myObj = stocks;
   //functions for getting dates
   function getCurrentDate(separator = "-") {
     let newDate = new Date();
@@ -74,157 +91,171 @@ const Gainloose = () => {
   //declaring objects and arrays for storing data
   let diffarr = {};
   let vollarr = {};
-//  let opennarr = {};
- // let highharr = {};
- // let lowwarr = {};
- // let closeearr = {};
- // let closearr = [];
+
   let difvalue = [];
+  let volarray=[];
 
 
- // let openarr = [];
- // let higharr = [];
- // let lowarr = [];
-  const [diffkey, setdiffkey] = useState([])
-  const [diffvalue, setdiffvalue] = useState([])
-  const [volarr, setvolarr] = useState([])
-  const [volkey, setvolkey] = useState([])
-  
   let called = 0;
   //getting dates for data drilling
   let date = getCurrentDate();
- // console.log(date)
+  // console.log(date)
   let ydate = getYesterdayDate();
   /////
 
-   //have to put this function in a try catch to solve date error
+  //have to put this function in a try catch to solve date error
 
   ///
 
   const fetchcompanies = async () => {
-   
-    try{
-    //for loop that jumps +5 ....api convienience
-    for (let i = called; i < Object.keys(myObj).length; i++) {
-      gainers++;
-      //fetching values
-      let response = await fetch(
-        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${myObj[i]}&outputsize=compact&apikey=FS77N1CHBPTE25F5`
-      );
-      let data = await response.json();
-
-      let value = data["Time Series (Daily)"][`${date}`]["4. close"];
-
-      let yvalue = data["Time Series (Daily)"][`${ydate}`]["4. close"];
-      let vol = data["Time Series (Daily)"][`${date}`]["6. volume"];
-      volarr.push(vol);
-      //let high = data["Time Series (Daily)"][`${date}`]["2. high"];
-      //higharr.push(high);
-      //let low = data["Time Series (Daily)"][`${date}`]["2. low"];
-      //lowarr.push(low);
-      //let open = data["Time Series (Daily)"][`${date}`]["2. open"];
-     // openarr.push(open);
-      let diff = value - yvalue;
-      difvalue.push(diff);
-      //closearr.push(value);
-
-      //creating objects for pushing close,open ,high etc values
-      diffarr[`${myObj[i]}`] = diff;
-      //opennarr[`${myObj[i]}`] = open;
-      //highharr[`${myObj[i]}`] = high;
-      //lowwarr[`${myObj[i]}`] = low;
-      vollarr[`${myObj[i]}`] = vol;
-     // closeearr[`${myObj[i]}`] = value;
-
-      if (gainers > called + 5) {
-        break;
-      }
-    }
-    //sorting  arrays of values
-     setdiffkey(Object.keys(diffarr).sort(function (a, b) {
-      return diffarr[b] - diffarr[a];
-    }))
-    setdiffvalue(difvalue.sort((a, b) => b - a));
-
-    setvolkey( Object.keys(vollarr).sort(function (a, b) {
-      return vollarr[b] - vollarr[a];
-    }));
-    setvolarr ( volarr.sort((a, b) => b - a));
     
-    // let highkey = Object.keys(highharr).sort(function (a, b) {
-    //   return highharr[b] - highharr[a];
-    // });
-    // higharr = higharr.sort((a, b) => b - a);
+      //for loop that jumps +5 ....api convienience
+      for (let i = called; i < Object.keys(myObj).length; i++) {
+        gainers++;
+        //fetching values
+       // let value
+       // let yvalue
+        let vol
+        let diff
+      
+        let response = await fetch(
+          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${myObj[i]}&apikey=FS77N1CHBPTE25F5`
+        );
+        let data = await response.json();
+      
+        //  value = data["Time Series (Daily)"][`${date}`]["4. close"];
 
-    called += 5;
+        //  yvalue = data["Time Series (Daily)"][`${ydate}`]["4. close"];
+        //  vol = data["Time Series (Daily)"][`${date}`]["6. volume"];
+        //  diff = value - yvalue;
     
+        vol=data["Global Quote"]["06. volume"]
+        diff=data["Global Quote"]["09. change"]
+        
+      
+        volarray.push(vol);
 
-   } catch{}
-   console.log(diffkey)
-//    let element=document.getElementById("byvolume")
-
-//    for (let i=0;i<=diffkey.length;i++){
+        difvalue.push(diff);
      
-//      element.innerHTML=`<p>${diffkey[i]}</p>`
-//  }
-  };
-  const taketoInd=(element)=>{
+        diffarr[`${myObj[i]}`] = diff;
+       
+        vollarr[`${myObj[i]}`] = vol;
+      
 
-  }
+        if (gainers >= called + 5)
+         {
+            break;
+        }
+     
+      }
+
+
+      setdiffkey(Object.keys(diffarr).sort(function (a, b) {
+          return diffarr[b] - diffarr[a];
+        })
+      );
+      setdiffvalue(difvalue.sort((a, b) => b - a));
+
+
+
+      setvolkey(Object.keys(vollarr).sort(function (a, b) {
+          return vollarr[b] - vollarr[a];
+        })
+      );
+      setvolarr(volarray.sort((a, b) => b - a));
+
+      console.log(diffkey)
+
+
+      sessionStorage.removeItem('diffkey')
+      sessionStorage.removeItem('diffvalue')
+      sessionStorage.removeItem('volkey')
+      sessionStorage.removeItem('volarr')
+      sessionStorage.setItem('diffkey',JSON.stringify(diffkey))
+      sessionStorage.setItem('diffvalue',JSON.stringify(diffvalue))
+      sessionStorage.setItem('volkey',JSON.stringify(volkey))
+      sessionStorage.setItem('volarr',JSON.stringify(volarr))
+    
+      called += 5;
+    
+    
+    
+  };
   
 
+  const taketoInd = (element,stockname) => {
+    setindi(element);
+    setstockname(stockname)
 
+  };
 
   return (
     <div >
-      Gainloose
-      <button className="btn-primary" onBlur={getstocks} onClick={fetchcompanies}>
+      <button
+        className="btn-primary"
+        // onMouseOver={getstocks}
+        onClick={fetchcompanies}
+      >
         {" "}
         click
       </button>
-     {/* <button className="btn-primary" onClick={getstocks}>to fetch from db</button> */}
+      {/* <button className="btn-primary" onClick={getstocks}>to fetch from db</button> */}
+
+     
+      <> <div className="container ">
+       <h3>trending by change in market</h3>
+       <table>
+         <thead>
+           <tr>
+             <th>name</th>
+             <th>symbol</th>
+             <th>change</th>
+           </tr>
+         </thead>{" "}
+         <tbody>
+           {diffkey.map((element, Index) => {
+             return (
+               <tr key={Index}>
+                 {" "}
+                 <Link to="/Stock" onClick={() => taketoInd(element,stocknameobj[element])}>
+                   <td>{stocknameobj[element]}</td>
+                 </Link>
+                 <td>{element}</td> <td>{diffvalue[Index]}</td>
+               </tr>
+             );
+           })}
+         </tbody>
+       </table>
+     </div>
+
+     <div className="container ">
+       <h3>trending by volume in market</h3>
+       <table>
+         <thead>
+           <tr>
+             <th>name</th>
+             <th>symbol</th>
+             <th>change</th>
+           </tr>
+         </thead>{" "}
+         <tbody>
+           {volkey.map((element, Index) => {
+             return (
+               <tr key={Index}>
+                 <Link to="/Stock" onClick={() => taketoInd(element,stocknameobj[element])}>
+                   <td>{stocknameobj[element]}</td>
+                 </Link>{" "}
+                 <td>{element}</td>
+                 <td>{volarr[Index]}</td>
+               </tr>
+             );
+           })}
+         </tbody>
+       </table>
+     </div></>
+   
       
-      <div className="container " ><h3>trending by change in market</h3>
-      <table>
-      <tr>
-        <th>name</th>
-        <th>symbol</th>
-        <th>change</th>
-      </tr>
-         {
-              diffkey.map((element,Index)=>{
-                return(
-                  <tr key={Index}> <Link onClick={()=>taketoInd(element)}>
-                  <td>{stocknameobj[element]}</td>    </Link> <td>{element}</td> <td>{diffvalue[Index]}</td>
-              
-                  </tr> 
-                )
-              })
-            }
-            </table>
-                         
-  </div>
-  
-  <div className="container " ><h3>trending by change in market</h3>
-      <table>
-      <tr>
-        <th>name</th>
-        <th>symbol</th>
-        <th>change</th>
-      </tr>
-         {
-              volkey.map((element,Index)=>{
-                return(
-                  <tr key={Index}>
-                  <td>{stocknameobj[element]}</td> <td>{element}</td> <td>{volarr[Index]}</td>
-                
-                  </tr> 
-                )
-              })
-            }
-            </table>
-                         
-  </div>
+     
     </div>
   );
 };

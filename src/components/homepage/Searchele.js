@@ -1,7 +1,16 @@
-import React from 'react';
-
+import React,{useContext} from 'react';
+import NoteContext from "../NoteContext";
+import { Link } from "react-router-dom";
 const Searchele = (props) => {
    let {symbol,name}=props
+   let context = useContext(NoteContext);
+   const { setindi ,setstockname } = context;
+
+   const setname=(symbol,name)=>{
+
+    setindi(symbol)
+    setstockname(name)
+   }
 
    const addtodb=async(symbol,name)=>{
   
@@ -24,7 +33,7 @@ const Searchele = (props) => {
  
   return (
     <div className='container my-3'> 
-        <p>{symbol}   --- {name} <button className="btn-primary" onClick={()=>addtodb(symbol,name)}>select</button> </p>
+        <p> <Link to="/Stock" onClick={()=>setname(symbol,name)}>{symbol}   --- {name} </Link> <button className="btn-primary" onClick={()=>addtodb(symbol,name)}>add to favourite</button> </p>
     </div>
   )
 }

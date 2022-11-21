@@ -18,8 +18,9 @@ const Login = (props) => {
     });
     const json = await response.json();
     if (json.success) {
-      localStorage.setItem("token", json.authToken);
+      sessionStorage.setItem("token", json.authToken);
       window.location.replace("/");
+
     } else {
     }
   };

@@ -5,11 +5,12 @@ import {
 import { useState } from "react";
 const Navbar = () => {
    
- let token=localStorage.getItem('token')
+ let token=sessionStorage.getItem('token')
 
   const logout=()=>{
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
     window.location.reload()
+  //  sessionStorage.clear()
 
   }
 
