@@ -1,5 +1,5 @@
 
-import e from 'cors';
+
 import React,{useState,useEffect} from 'react'
 import Searchele from './Searchele';
 

@@ -8,8 +8,8 @@ import Signup
 
 from "./components/Signup";
 import StockState from "./components/StockState";
-import Stock from "./components/Stock";
-import Add from "./components/homepage/Add";
+import Stock from "./components/stock/Stock";
+import Add from "./components/search/Add";
 const App = () => {
   return (
     <>
