@@ -201,6 +201,14 @@ const Stock = () => {
     
   }
 
+  const weeklydata=()=>{
+    console.log("will be fetched tomorrow")
+  }
+  const monthlydata=()=>{
+    console.log("will be fetched tomorrow")
+
+  }
+
   ///todo
   ////generating graphs
 
@@ -239,6 +247,11 @@ const Stock = () => {
         <div id="chart-container">
           <ReactFC {...chartConfigs} />
         </div>
+        <div className="container"> 
+        <button className="btn-primary" onClick={weeklydata}>weekly</button>
+        <button className="btn-primary" onClick={monthlydata}>monthly</button>
+
+         </div>
       </div>
     </>
   );
