@@ -17,7 +17,7 @@ const Searchele = (props) => {
     try{      const response = await fetch(`http://localhost:3001/api/stocks/addstock`, {
      method: 'POST',
      headers: {
-       "auth-token": localStorage.getItem('token'),
+       "auth-token": sessionStorage.getItem('token'),
        'Content-Type': 'application/json'
      },
      body: JSON.stringify({title:symbol,name:name})

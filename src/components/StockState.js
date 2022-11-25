@@ -8,11 +8,11 @@ const StockState = (props) => {
     const [diffvalue, setdiffvalue] = useState([]);
     const [volarr, setvolarr] = useState([]);
     const [volkey, setvolkey] = useState([]);
-    const [data, setdata] = useState({})
+    const [gdata, setgdata] = useState([])
   const [dailydata, setdailydata] = useState({})
 
     return (
-    <>  <NoteContext.Provider value={{indi,setindi,stockname,setstockname,diffkey,diffvalue,volarr,volkey,setdiffkey,setdiffvalue,setvolarr,setvolkey,data,setdata,dailydata,setdailydata}}>
+    <>  <NoteContext.Provider value={{indi,setindi,stockname,setstockname,diffkey,diffvalue,volarr,volkey,setdiffkey,setdiffvalue,setvolarr,setvolkey,gdata,setgdata,dailydata,setdailydata}}>
     {props.children}
 
 </NoteContext.Provider></>

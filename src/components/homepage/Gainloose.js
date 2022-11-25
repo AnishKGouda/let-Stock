@@ -16,7 +16,7 @@ const Gainloose = () => {
 
 
   let context = useContext(NoteContext);
-  const { setindi, setstockname,setdiffkey,setdiffvalue,setvolarr,setvolkey,diffvalue,diffkey,volarr,volkey ,setdata,data} = context;
+  const { setindi, setstockname,setdiffkey,setdiffvalue,setvolarr,setvolkey,diffvalue,diffkey,volarr,volkey,indi ,setgdata,gdata} = context;
   let famous = {};
   // let stocknameobj={}
 
@@ -100,27 +100,27 @@ const Gainloose = () => {
 
   const myObj = stocks;
   //functions for getting dates
-  function getCurrentDate(separator = "-") {
-    let newDate = new Date();
-    let date = newDate.getDate() - 2;
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
+  // function getCurrentDate(separator = "-") {
+  //   let newDate = new Date();
+  //   let date = newDate.getDate() - 2;
+  //   let month = newDate.getMonth() + 1;
+  //   let year = newDate.getFullYear();
 
-    return `${year}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${date < 10 ? `0${date}` : `${date}`}`;
-  }
+  //   return `${year}${separator}${
+  //     month < 10 ? `0${month}` : `${month}`
+  //   }${separator}${date < 10 ? `0${date}` : `${date}`}`;
+  // }
 
-  function getYesterdayDate(separator = "-") {
-    let newDate = new Date();
-    let date = newDate.getDate() - 3;
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
+  // function getYesterdayDate(separator = "-") {
+  //   let newDate = new Date();
+  //   let date = newDate.getDate() - 3;
+  //   let month = newDate.getMonth() + 1;
+  //   let year = newDate.getFullYear();
 
-    return `${year}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${date < 10 ? `0${date}` : `${date}`}`;
-  }
+  //   return `${year}${separator}${
+  //     month < 10 ? `0${month}` : `${month}`
+  //   }${separator}${date < 10 ? `0${date}` : `${date}`}`;
+  // }
 
   //declaring objects and arrays for storing data
   let diffarr = {};
@@ -131,9 +131,9 @@ const Gainloose = () => {
 
   let called = 0;
   //getting dates for data drilling
-  let date = getCurrentDate();
-  // console.log(date)
-  let ydate = getYesterdayDate();
+  // let date = getCurrentDate();
+  // // console.log(date)
+  // let ydate = getYesterdayDate();
   /////
 
   //have to put this function in a try catch to solve date error
@@ -153,17 +153,21 @@ const Gainloose = () => {
       let response = await fetch(
         `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${myObj[i]}&apikey=FS77N1CHBPTE25F5`
       );
-      setdata ( await response.json());
+       let data= await response.json();
+       gdata.push(data)
 
       //  value = data["Time Series (Daily)"][`${date}`]["4. close"];
 
       //  yvalue = data["Time Series (Daily)"][`${ydate}`]["4. close"];
       //  vol = data["Time Series (Daily)"][`${date}`]["6. volume"];
       //  diff = value - yvalue;
-
+     try{
       vol = data["Global Quote"]["06. volume"];
       diff = data["Global Quote"]["09. change"];
+     }catch(e){
+      continue
 
+     }
       volarray.push(vol);
 
       difvalue.push(diff);
@@ -177,12 +181,15 @@ const Gainloose = () => {
       }
     }
 
-    setdiffkey(
-      Object.keys(diffarr).sort(function (a, b) {
+    diffarr=Object.keys(diffarr).sort(function (a, b) {
         return diffarr[b] - diffarr[a];
       })
-    );
-    setdiffvalue(difvalue.sort((a, b) => b - a));
+   setdiffkey(diffarr)
+   console.log(diffkey)
+   console.log(difvalue)
+    difvalue=difvalue.sort((a, b) => b - a)
+    console.log(difvalue)
+    setdiffvalue(difvalue)
 
     setvolkey(
       Object.keys(vollarr).sort(function (a, b) {
@@ -190,7 +197,7 @@ const Gainloose = () => {
       })
     );
     setvolarr(volarray.sort((a, b) => b - a));
-    console.log(diffkey)
+   
     
 
    
@@ -200,9 +207,13 @@ const Gainloose = () => {
 
 
 
-  const taketoInd = (element, stockname) => {
-    setindi(element);
-    setstockname(stockname);
+  const taketoInd = (element, stockname,Index) => {
+    
+    sessionStorage.setItem('stockname',stockname)
+    
+    sessionStorage.setItem('gdata',JSON.stringify(gdata[Index]));
+    sessionStorage.setItem('indi',element)
+    
   };
 
   return (
@@ -236,7 +247,7 @@ const Gainloose = () => {
                     {" "}
                     <Link
                       to="/Stock"
-                      onClick={() => taketoInd(element, stocknameobj[element])}
+                      onClick={() => taketoInd(element, stocknameobj[element],Index)}
                     >
                       <td>{stocknameobj[element]}</td>
                     </Link>
@@ -254,7 +265,7 @@ const Gainloose = () => {
               <tr>
                 <th>name</th>
                 <th>symbol</th>
-                <th>change</th>
+                <th>volume</th>
               </tr>
             </thead>{" "}
             <tbody>
@@ -263,7 +274,7 @@ const Gainloose = () => {
                   <tr key={Index}>
                     <Link
                       to="/Stock"
-                      onClick={() => taketoInd(element, stocknameobj[element])}
+                      onClick={() => taketoInd(element, stocknameobj[element],Index)}
                     >
                       <td>{stocknameobj[element]}</td>
                     </Link>{" "}
