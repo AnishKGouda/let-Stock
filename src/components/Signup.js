@@ -33,13 +33,13 @@ const Signup = (props) => {
       if (json.success) {
         sessionStorage.setItem("token", json.authToken);
         window.location.replace("/");
-        props.showalert("account created  succesfully","success")
+       // props.showalert("account created  succesfully","success")
 
       } else {
-        props.showalert("wrong credentials","danger")
+     //   props.showalert("wrong credentials","danger")
       }
     } else {
-      props.showalert("passwords do not match","danger")
+      //props.showalert("passwords do not match","danger")
     }
   };
   return (
