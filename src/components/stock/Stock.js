@@ -17,9 +17,12 @@ import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 ReactFC.fcRoot(FusionCharts, candlestick, FusionTheme);
 
 const Stock = () => {
+  const apikey=process.env.REACT_APP_apikey;
   //variables for data
   const context = useContext(NoteContext);
   let navigate = useNavigate();
+
+const [seed, setseed] = useState(1)
   let {  setdailydata, dailydata} = context;
   const [qhigh, setqhigh] = useState("");
   const [qlow, setqlow] = useState("");
@@ -75,7 +78,7 @@ const Stock = () => {
   //fetching daily data
   const fetchdailydata = async (element) => {
     let response = await fetch(
-      `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${element}&outputsize=compact&apikey=FS77N1CHBPTE25F5`
+      `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${element}&outputsize=compact&apikey=${apikey}`
     );
     setdailydata(await response.json());
 
@@ -100,8 +103,8 @@ const Stock = () => {
    
     setchartConfigs({
       type: "candlestick", // The chart type
-      width: "1000", // Width of the chart
-      height: "800",
+      width: "800", // Width of the chart
+      height: "400",
       // Height of the chart
       dataFormat: "json", // Data type
       dataSource: {
@@ -142,50 +145,7 @@ const Stock = () => {
         ],
         dataset: [
           { 
-            data: datas
-              ? datas
-              : [
-                  {
-                    open: "18.74",
-                    high: "19.16",
-                    low: "18.67 ",
-                    close: "18.99",
-                    x: "1",
-                    volume: "4991285",
-                  },
-                  {
-                    open: "18.74",
-                    high: "19.06",
-                    low: "18.54",
-                    close: "18.82",
-                    x: "2",
-                    volume: "3615889",
-                  },
-                  {
-                    open: "19.21",
-                    high: "19.3",
-                    low: "18.59 ",
-                    close: "18.65",
-                    x: "3",
-                    volume: "4749586",
-                  },
-                  {
-                    open: "19.85",
-                    high: "19.86",
-                    low: "19.12",
-                    close: "19.4",
-                    x: "4",
-                    volume: "4366740",
-                  },
-                  {
-                    open: "20.19",
-                    high: "20.21",
-                    low: "19.57",
-                    close: "19.92",
-                    x: "5",
-                    volume: "3982709",
-                  },
-                ],
+            data: datas      
           },
         ],
       },
@@ -193,33 +153,183 @@ const Stock = () => {
    
   };
 
-  const reload=()=>{
-       navigate('/')
-       setTimeout(() => {
-        navigate('/Stock')
-       }, 1);
-    
-  }
+ 
+///////////weekly
+  const weeklydata=async(element)=>{
+    console.log("will be fetched tomorrow")
+    let response = await fetch(
+      `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${element}&apikey=${apikey}`
+    );
+    setdailydata(await response.json());
 
-  const weeklydata=()=>{
-    console.log("will be fetched tomorrow")
+    let jsondata = dailydata["Weekly Time Series"];
+
+   try {
+    for (let i in jsondata) {
+      let json = {};
+      json["open"] = jsondata[i]["1. open"];
+      json["high"] = jsondata[i]["2. high"];
+      json["low"] = jsondata[i]["3. low"];
+      json["close"] = jsondata[i]["4. close"];
+      json["x"] = count;
+      json["volume"] = jsondata[i]["5. volume"];
+      datas.push(json);
+      count++;
+    }
+   } catch (error) {
+    
+   }
+    //console.log(datas);
+   
+    setchartConfigs({
+      type: "candlestick", // The chart type
+      width: "800", // Width of the chart
+      height: "400",
+      // Height of the chart
+      dataFormat: "json", // Data type
+      dataSource: {
+        chart: {
+          id:"chart",
+        
+          theme: "fusion",
+          caption: `weekly Stock Price ${element}`,
+          subCaption: "Last 2 months",
+          numberprefix: "$",
+          vNumberPrefix: " ",
+          pyaxisname: "Price",
+          vyaxisname: "Volume (In Millions)",
+          toolTipColor: "#ffffff",
+          toolTipBorderThickness: "0",
+          toolTipBgColor: "#000000",
+          toolTipBgAlpha: "80",
+          toolTipBorderRadius: "2",
+          toolTipPadding: "5",
+        },
+        categories: [
+          {
+            category: [
+              {
+                label: "2 month ago",
+                x: "1",
+              },
+              {
+                label: "1 month ago",
+                x: "51",
+              },
+              {
+                label: "Today",
+                x: "100",
+              },
+            ],
+          },
+        ],
+        dataset: [
+          { 
+            data: datas      
+          },
+        ],
+      },
+    })
+
   }
-  const monthlydata=()=>{
+  const monthlydata=async(element)=>{
     console.log("will be fetched tomorrow")
+    let response = await fetch(
+      `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${element}&apikey=${apikey}`
+    );
+    setdailydata(await response.json());
+
+    let jsondata = dailydata["Monthly Time Series"];
+
+   try {
+    for (let i in jsondata) {
+      let json = {};
+      json["open"] = jsondata[i]["1. open"];
+      json["high"] = jsondata[i]["2. high"];
+      json["low"] = jsondata[i]["3. low"];
+      json["close"] = jsondata[i]["4. close"];
+      json["x"] = count;
+      json["volume"] = jsondata[i]["5. volume"];
+      datas.push(json);
+      count++;
+    }
+   } catch (error) {
+    
+   }
+    //console.log(datas);
+   
+    setchartConfigs({
+      type: "candlestick", // The chart type
+      width: "800", // Width of the chart
+      height: "400",
+      // Height of the chart
+      dataFormat: "json", // Data type
+      dataSource: {
+        chart: {
+          id:"chart",
+        
+          theme: "fusion",
+          caption: `monthly Stock Price ${element}`,
+          subCaption: "Last 2 months",
+          numberprefix: "$",
+          vNumberPrefix: " ",
+          pyaxisname: "Price",
+          vyaxisname: "Volume (In Millions)",
+          toolTipColor: "#ffffff",
+          toolTipBorderThickness: "0",
+          toolTipBgColor: "#000000",
+          toolTipBgAlpha: "80",
+          toolTipBorderRadius: "2",
+          toolTipPadding: "5",
+        },
+        categories: [
+          {
+            category: [
+              {
+                label: "2 month ago",
+                x: "1",
+              },
+              {
+                label: "1 month ago",
+                x: "51",
+              },
+              {
+                label: "Today",
+                x: "100",
+              },
+            ],
+          },
+        ],
+        dataset: [
+          { 
+            data: datas      
+          },
+        ],
+      },
+    })
 
   }
 
   ///todo
-  ////generating graphs
-
-  // STEP 3 - Creating the JSON object to store the chart configurations
-
-  //   FusionCharts.ready(function(){
-  //     var fusioncharts = new FusionCharts(chartConfigs);
-  // fusioncharts.render();
-  // });
-
-  ///fetching weekly and  monthly data
+ 
+  const reload=(n)=>{
+    setseed(Math.random());
+    switch (n) {
+      case 1:    fetchdailydata(sessionStorage.getItem('indi'));
+      break;
+      case 2:    weeklydata(sessionStorage.getItem('indi'));
+      break;
+      case 3:    monthlydata(sessionStorage.getItem('indi'));
+      break;
+      default: fetchdailydata(sessionStorage.getItem('indi'));
+        break;
+    }
+    // navigate('/')
+    // setTimeout(() => {
+    //  navigate('/Stock')
+    // }, 1);
+ 
+}
   return (
     <>
       <div>
@@ -242,14 +352,14 @@ const Stock = () => {
           change percentage :{qchangepercent}
         </div>
         <div className="container align-center">
-          <button type="button"  className="btn-primary" value="update graph" onClick={reload}>update graph</button>
+          <button type="button"  className="btn-primary" value="update graph" onClick={()=>reload(1)}>update graph</button>
         </div>
-        <div id="chart-container">
-          <ReactFC {...chartConfigs} />
+        <div id="chart-container" >
+          <ReactFC {...chartConfigs} key={seed}/>
         </div>
         <div className="container"> 
-        <button className="btn-primary" onClick={weeklydata}>weekly</button>
-        <button className="btn-primary" onClick={monthlydata}>monthly</button>
+        <button className="btn-primary" onClick={()=>reload(2)}>weekly</button>
+        <button className="btn-primary" onClick={()=>reload(3)}>monthly</button>
 
          </div>
       </div>

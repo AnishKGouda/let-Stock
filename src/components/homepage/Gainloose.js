@@ -19,7 +19,7 @@ const Gainloose = () => {
   const { setindi, setstockname,setdiffkey,setdiffvalue,setvolarr,setvolkey,diffvalue,diffkey,volarr,volkey,indi ,setgdata,gdata} = context;
   let famous = {};
   // let stocknameobj={}
-
+  const apikey=process.env.REACT_APP_apikey;
   const host = "http://localhost:3001";
   const [stocks, setstock] = useState(famous);
   const [stocknameobj, setstocknameobj] = useState({});
@@ -151,7 +151,7 @@ const Gainloose = () => {
       let diff;
 
       let response = await fetch(
-        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${myObj[i]}&apikey=FS77N1CHBPTE25F5`
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${myObj[i]}&apikey=${apikey}`
       );
        let data= await response.json();
        gdata.push(data)
