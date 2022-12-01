@@ -19,6 +19,11 @@ const UserSchema=new Schema({
         required:true
 
     },
+    verified:{
+        type:Boolean,
+        default:false
+    },
+
     date:{
         type:Date,
         default:Date.now
