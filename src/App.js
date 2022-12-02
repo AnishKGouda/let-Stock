@@ -4,10 +4,8 @@ import Home from "./components/homepage/Home";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
 import Login from "./components/Login";
-import Signup
-
-from "./components/Signup";
-
+import Signup from "./components/Signup";
+import Resetpass from "./components/Resetpass";
 import StockState from "./components/StockState";
 import Stock from "./components/stock/Stock";
 import Add from "./components/search/Add";
@@ -28,6 +26,7 @@ const App = () => {
             <Route path="/Signup" element={<Signup />} />
            <Route path="/search" element={<Add/>}/>  
            <Route path="/Stock" element={<Stock/>}/>
+           <Route path="/Resetpass" element={<Resetpass/>}/>
           </Routes>
         </div>
       </Router>

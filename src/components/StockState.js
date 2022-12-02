@@ -10,9 +10,10 @@ const StockState = (props) => {
     const [volkey, setvolkey] = useState([]);
     const [gdata, setgdata] = useState([])
   const [dailydata, setdailydata] = useState({})
+  const [forgotemail, setforgotemail] = useState("")
 
     return (
-    <>  <NoteContext.Provider value={{indi,setindi,stockname,setstockname,diffkey,diffvalue,volarr,volkey,setdiffkey,setdiffvalue,setvolarr,setvolkey,gdata,setgdata,dailydata,setdailydata}}>
+    <>  <NoteContext.Provider value={{forgotemail,setforgotemail,indi,setindi,stockname,setstockname,diffkey,diffvalue,volarr,volkey,setdiffkey,setdiffvalue,setvolarr,setvolkey,gdata,setgdata,dailydata,setdailydata}}>
     {props.children}
 
 </NoteContext.Provider></>

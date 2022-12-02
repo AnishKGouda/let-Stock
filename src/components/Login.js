@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext,useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NoteContext from "./NoteContext";
+
+
 const Login = (props) => {
+  const context = useContext(NoteContext);
+    let { setforgotemail} =context;
+
+
   const [creds, setcreds] = useState({ email: "", password: "" });
   let navigate = useNavigate();
 
@@ -31,7 +38,9 @@ const Login = (props) => {
       alert("email is required")
       
     }
+
     else{
+      setforgotemail(creds.email);
     const response = await fetch(`http://localhost:3001/api/auth/forgotpass`, {
       method: "POST",
       headers: {
@@ -48,7 +57,9 @@ const Login = (props) => {
   }
   }
   return (
-    <>
+    <> 
+    <div className="container ">
+
       <form className="container px-10 my-5 w-50 " onSubmit={handlesubmit}>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Email address</label>
@@ -85,8 +96,8 @@ const Login = (props) => {
         </button>
       
       </form>
-      <form >  <button  type="submit" onClick={handleforgot}>forgot password..?</button></form>
-    </>
+      <form className="float-right" >  <button className="" type="submit" onClick={handleforgot}>forgot password..?</button></form>
+      </div>  </>
   );
 };
 

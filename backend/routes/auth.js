@@ -10,8 +10,6 @@ const { sendConfirmationEmail ,sendResetPasswordEmail}  = require('../sendmail')
 const otpGenerator = require('otp-generator');
 
 
-
-
 router.post('/signup',
 //validators
 [
@@ -33,7 +31,7 @@ try{
   //password hashing and salting
     const salt= await bcrypt.genSalt(10);
     let secPass= await bcrypt.hash(req.body.password,salt)
-
+///sending verification email
     await sendConfirmationEmail({toUser:req.body.email})
   
     //creating new user
@@ -83,7 +81,7 @@ try{
          
           const passcompare= await bcrypt.compare(password,user.password)
           if (!passcompare){
-            return res.status(400).json({error:"invalid credentials"})
+            return res.status(400).json({error:"invalid password"})
 
           }
           
@@ -132,10 +130,12 @@ try{
                email:user.email      
   
             }
-           let hash= otpGenerator.generate(6, { upperCaseAlphabets: true, specialChars: true });
-           await sendResetPasswordEmail({toUser:user.email,hash})
+           const hash = otpGenerator.generate(6, { upperCaseAlphabets: true, specialChars: true });
+           await sendResetPasswordEmail({toUser:user.email,hash});
+           await User.findOneAndUpdate({email:req.body.email},{hash:hash},{new: true});
+          
           res.json({data})
-           
+         
           }catch(error){
             console.error(error)
             res.status(500).json({error:"internal server error"})
@@ -144,7 +144,33 @@ try{
           }
       })
 //reset password
+router.post('/reset-password' ,async (req,res)=>{
+  const user= await User.findOne({email:req.body.email});
+  if(user){
 
+  }
+  try {
+    //verifying otp 
+    if(req.body.otp===user.hash){
+
+    //  //password hashing and salting
+    const salt= await bcrypt.genSalt(10);
+    let secPass= await bcrypt.hash(req.body.password,salt)
+
+    //updating the password
+    await User.findOneAndUpdate({email:req.body.email},{password:secPass},{new: true});
+    
+    res.json({success:"true"});
+    }else{
+      res.json({error:"otp doesnt match"});
+    }
+    
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({error:"internal server error"})
+
+  }
+  })
 
 
 
@@ -158,9 +184,7 @@ try {
   console.error(error)
   res.status(500).json({error:"internal server error"})
 
-}        
-
-        
+}          
       }  )
 
 module.exports=router
