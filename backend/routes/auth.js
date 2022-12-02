@@ -6,7 +6,8 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var fetchuser = require('../middleware/fetchuser')
 const  jwt_secret ="this is not a secret"
-const  sendConfirmationEmail  = require('../sendmail');
+const { sendConfirmationEmail ,sendResetPasswordEmail}  = require('../sendmail');
+const otpGenerator = require('otp-generator');
 
 
 
@@ -107,19 +108,47 @@ try{
 
         }
     })
-    // router.post('/getuser' ,fetchuser,async (req,res)=>{
+
+    ////forgot password
+    router.post('/forgotpass',[
+    
+      body('email','enter a valid email').isEmail()] ,async (req,res)=>{
+       
+        const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+          }
+  
+          const {email}=req.body;
+          try{
+            const user= await User.findOne({email:email});
+            if(!user){
+           return res.status(400).json({error:"invalid credentials"})
+  
+            }
+          
      
-    //     try {
-    //     let  userId=req.user.id;
-    //       const user=await User.findById(userId).select("-password")
-    //       res.send(user)
-    //     } catch (error) {
-    //       console.error(error)
-    //       res.status(500).json({error:"internal server error"})          
-    //     }
+            const data={
+               email:user.email      
+  
+            }
+           let hash= otpGenerator.generate(6, { upperCaseAlphabets: true, specialChars: true });
+           await sendResetPasswordEmail({toUser:user.email,hash})
+          res.json({data})
+           
+          }catch(error){
+            console.error(error)
+            res.status(500).json({error:"internal server error"})
+  
+  
+          }
+      })
+//reset password
 
-    //   }  )
 
+
+
+      ////email verification
       router.get('/activate',async (req,res)=>{
 try {
   let user=await User.findOneAndUpdate({email:req.query.email},{verified:true},{new: true});

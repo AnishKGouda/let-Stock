@@ -27,7 +27,7 @@ const sendConfirmationEmail = function({toUser}) {
     from: process.env.GOOGLE_USER,
     // to: toUser.email // in production uncomment this
     to:toUser,
-    subject: 'Your App - Activate Account',
+    subject: 'Let`Stock - Activate Account',
     html: `
       <h3> Hello ${toUser} </h3>
       <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>
@@ -40,21 +40,22 @@ const sendConfirmationEmail = function({toUser}) {
   return sendEmail(message);
 }
 
-// const sendResetPasswordEmail = ({toUser, hash}) => {
-//   const message = {
-//     from: process.env.GOOGLE_USER,
-//     // to: toUser.email // in production uncomment this
-//     to: process.env.GOOGLE_USER,
-//     subject: 'Your App - Reset Password',
-//     html: `
-//       <h3>Hello ${toUser.username} </h3>
-//       <p>To reset your password please follow this link: <a target="_" href="${process.env.DOMAIN}/reset-password/${hash}">Reset Password Link</a></p>
-//       <p>Cheers,</p>
-//       <p>Your Application Team</p>
-//     `
-//   }
+const sendResetPasswordEmail = ({toUser, hash}) => {
+  const message = {
+    from: process.env.GOOGLE_USER,
+    // to: toUser.email // in production uncomment this
+    to: toUser,
+    subject: 'Let`Stock - Reset Password',
+    html: `
+      <h3>Hello ${toUser} </h3>
+      <p>To reset your password please follow this link: <a target="_" href="${process.env.DOMAIN}/api/auth/reset-password">Reset Password Link</a></p>
+      <p>this is your one time password for resetting the password ---<button>${hash}</button> </p>
+      <p>Cheers,</p>
+      <p>Let'Stock Application Team</p>
+    `
+  }
 
-//   return sendEmail(message);
-// }
+  return sendEmail(message);
+}
 
-module.exports=sendConfirmationEmail;
+module.exports={sendConfirmationEmail,sendResetPasswordEmail};

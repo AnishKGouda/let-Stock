@@ -24,6 +24,29 @@ const Login = (props) => {
     } else {
     }
   };
+
+  const handleforgot= async (e)=>{
+    e.preventDefault();
+    if (creds.email===""){
+      alert("email is required")
+      
+    }
+    else{
+    const response = await fetch(`http://localhost:3001/api/auth/forgotpass`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: creds.email }),
+    });
+    const json = await response.json();
+    
+    setTimeout(() => {
+      alert("password reset email is sent your given gmail")
+      
+    }, 1000);
+  }
+  }
   return (
     <>
       <form className="container px-10 my-5 w-50 " onSubmit={handlesubmit}>
@@ -37,6 +60,7 @@ const Login = (props) => {
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            required
           />
           <small id="emailHelp" className="form-text text-muted">
             We'll never share your email with anyone else.
@@ -59,7 +83,9 @@ const Login = (props) => {
         <button type="submit" className="btn btn-primary my-2">
           Submit
         </button>
+      
       </form>
+      <form >  <button  type="submit" onClick={handleforgot}>forgot password..?</button></form>
     </>
   );
 };
