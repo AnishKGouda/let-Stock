@@ -19,7 +19,7 @@ const Gainloose = () => {
   const { setindi, setstockname,setdiffkey,setdiffvalue,setvolarr,setvolkey,diffvalue,diffkey,volarr,volkey,indi ,setgdata,gdata} = context;
   let famous = {};
   // let stocknameobj={}
-  const apikey=process.env.REACT_APP_apikey;
+  const apikey=process.env.REACT_APP_API;
   const host = "http://localhost:3001";
   const [stocks, setstock] = useState(famous);
   const [stocknameobj, setstocknameobj] = useState({});
@@ -210,7 +210,7 @@ const Gainloose = () => {
   const taketoInd = (element, stockname,Index) => {
     
     sessionStorage.setItem('stockname',stockname)
-    
+    sessionStorage.setItem('searchbar',false)
     sessionStorage.setItem('gdata',JSON.stringify(gdata[Index]));
     sessionStorage.setItem('indi',element)
     

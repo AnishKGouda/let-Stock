@@ -12,18 +12,19 @@ import candlestick from "fusioncharts/fusioncharts.charts";
 
 // // Step 5 - Include the theme as fusion
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+import Sentiment from "./Sentiment";
 
 // // Step 6 - Adding the chart and theme as dependency to the core fusioncharts
 ReactFC.fcRoot(FusionCharts, candlestick, FusionTheme);
 
 const Stock = () => {
-  const apikey=process.env.REACT_APP_apikey;
+  const apikey = process.env.REACT_APP_API;
   //variables for data
   const context = useContext(NoteContext);
   let navigate = useNavigate();
 
-const [seed, setseed] = useState(1)
-  let {  setdailydata, dailydata} = context;
+  const [seed, setseed] = useState(1);
+  let { setdailydata, dailydata } = context;
   const [qhigh, setqhigh] = useState("");
   const [qlow, setqlow] = useState("");
   const [qopen, setqopen] = useState("");
@@ -37,41 +38,48 @@ const [seed, setseed] = useState(1)
   const [chartConfigs, setchartConfigs] = useState();
   //for fetching data
   useEffect(() => {
-    fetchdailydata(sessionStorage.getItem('indi'));
-    globalQuote(sessionStorage.getItem('indi'));
-       
-  }, []);
-   let stockname=sessionStorage.getItem('stockname')
-  // function getCurrentDate(separator = "-") {
-  //   let newDate = new Date();
-  //   let date = newDate.getDate() - 1;
-  //   let month = newDate.getMonth() + 1;
-  //   let year = newDate.getFullYear();
+    globalQuote(sessionStorage.getItem("indi"));
+    setTimeout(() => {
+      // fetchdailydata(sessionStorage.getItem('indi'));
+      globalQuote(sessionStorage.getItem("indi"));
+    }, 2000);
 
-  //   return `${year}${separator}${
-  //     month < 10 ? `0${month}` : `${month}`
-  //   }${separator}${date < 10 ? `0${date}` : `${date}`}`;
-  // }
-  // let date = getCurrentDate();
+  }, []);
+  let stockname = sessionStorage.getItem("stockname");
+  //
+  const fetchglobal = async () => {
+    let response = await fetch(
+      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sessionStorage.getItem(
+        "indi"
+      )}&apikey=${apikey}`
+    );
+    let data = await response.json();
+    sessionStorage.setItem("gdata", JSON.stringify(data));
+  };
+
+  let checksource = sessionStorage.getItem("searchbar");
+  if (checksource) {
+    fetchglobal();
+  }
+
+  //fetching market news and sentiment
 
   //fetching global quote data
 
   const globalQuote = async () => {
     let data;
     //console.log(gdata)//
-   data=JSON.parse(sessionStorage.getItem('gdata'))
+    data = JSON.parse(sessionStorage.getItem("gdata"));
 
-    
-      setqopen(data["Global Quote"]["02. open"]);
-      setqclose(data["Global Quote"]["08. previous close"]);
-      setqhigh(data["Global Quote"]["03. high"]);
-      setqlow(data["Global Quote"]["04. low"]);
-      setqprice(data["Global Quote"]["05. price"]);
-      setqvol(data["Global Quote"]["06. volume"]);
-      setqlastdate(data["Global Quote"]["07. latest trading day"]);
-      setqchange(data["Global Quote"]["09. change"]);
-      setqchangepercent(data["Global Quote"]["10. change percent"]);
-    
+    setqopen(data["Global Quote"]["02. open"]);
+    setqclose(data["Global Quote"]["08. previous close"]);
+    setqhigh(data["Global Quote"]["03. high"]);
+    setqlow(data["Global Quote"]["04. low"]);
+    setqprice(data["Global Quote"]["05. price"]);
+    setqvol(data["Global Quote"]["06. volume"]);
+    setqlastdate(data["Global Quote"]["07. latest trading day"]);
+    setqchange(data["Global Quote"]["09. change"]);
+    setqchangepercent(data["Global Quote"]["10. change percent"]);
   };
   let datas = [];
   let count = 1;
@@ -84,23 +92,21 @@ const [seed, setseed] = useState(1)
 
     let jsondata = dailydata["Time Series (Daily)"];
 
-   try {
-    for (let i in jsondata) {
-      let json = {};
-      json["open"] = jsondata[i]["1. open"];
-      json["high"] = jsondata[i]["2. high"];
-      json["low"] = jsondata[i]["3. low"];
-      json["close"] = jsondata[i]["4. close"];
-      json["x"] = count;
-      json["volume"] = jsondata[i]["6. volume"];
-      datas.push(json);
-      count++;
-    }
-   } catch (error) {
-    
-   }
+    try {
+      for (let i in jsondata) {
+        let json = {};
+        json["open"] = jsondata[i]["1. open"];
+        json["high"] = jsondata[i]["2. high"];
+        json["low"] = jsondata[i]["3. low"];
+        json["close"] = jsondata[i]["4. close"];
+        json["x"] = count;
+        json["volume"] = jsondata[i]["6. volume"];
+        datas.push(json);
+        count++;
+      }
+    } catch (error) {}
     //console.log(datas);
-   
+
     setchartConfigs({
       type: "candlestick", // The chart type
       width: "800", // Width of the chart
@@ -109,8 +115,8 @@ const [seed, setseed] = useState(1)
       dataFormat: "json", // Data type
       dataSource: {
         chart: {
-          id:"chart",
-        
+          id: "chart",
+
           theme: "fusion",
           caption: `Daily Stock Price ${element}`,
           subCaption: "Last 2 months",
@@ -144,43 +150,38 @@ const [seed, setseed] = useState(1)
           },
         ],
         dataset: [
-          { 
-            data: datas      
+          {
+            data: datas,
           },
         ],
       },
     });
-   
   };
 
- 
-///////////weekly
-  const weeklydata=async(element)=>{
-    console.log("will be fetched tomorrow")
+  ///////////weekly
+  const weeklydata = async (element) => {
     let response = await fetch(
       `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${element}&apikey=${apikey}`
     );
-    setdailydata(await response.json());
+    let weeklydata = await response.json();
 
-    let jsondata = dailydata["Weekly Time Series"];
+    let jsondata = weeklydata["Weekly Time Series"];
 
-   try {
-    for (let i in jsondata) {
-      let json = {};
-      json["open"] = jsondata[i]["1. open"];
-      json["high"] = jsondata[i]["2. high"];
-      json["low"] = jsondata[i]["3. low"];
-      json["close"] = jsondata[i]["4. close"];
-      json["x"] = count;
-      json["volume"] = jsondata[i]["5. volume"];
-      datas.push(json);
-      count++;
-    }
-   } catch (error) {
-    
-   }
+    try {
+      for (let i in jsondata) {
+        let json = {};
+        json["open"] = jsondata[i]["1. open"];
+        json["high"] = jsondata[i]["2. high"];
+        json["low"] = jsondata[i]["3. low"];
+        json["close"] = jsondata[i]["4. close"];
+        json["x"] = count;
+        json["volume"] = jsondata[i]["5. volume"];
+        datas.push(json);
+        count++;
+      }
+    } catch (error) {}
     //console.log(datas);
-   
+
     setchartConfigs({
       type: "candlestick", // The chart type
       width: "800", // Width of the chart
@@ -189,8 +190,8 @@ const [seed, setseed] = useState(1)
       dataFormat: "json", // Data type
       dataSource: {
         chart: {
-          id:"chart",
-        
+          id: "chart",
+
           theme: "fusion",
           caption: `weekly Stock Price ${element}`,
           subCaption: "Last 2 months",
@@ -224,40 +225,36 @@ const [seed, setseed] = useState(1)
           },
         ],
         dataset: [
-          { 
-            data: datas      
+          {
+            data: datas,
           },
         ],
       },
-    })
-
-  }
-  const monthlydata=async(element)=>{
-    console.log("will be fetched tomorrow")
+    });
+  };
+  const monthlydata = async (element) => {
     let response = await fetch(
       `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${element}&apikey=${apikey}`
     );
-    setdailydata(await response.json());
+    let monthlydata = await response.json();
 
-    let jsondata = dailydata["Monthly Time Series"];
+    let jsondata = monthlydata["Monthly Time Series"];
 
-   try {
-    for (let i in jsondata) {
-      let json = {};
-      json["open"] = jsondata[i]["1. open"];
-      json["high"] = jsondata[i]["2. high"];
-      json["low"] = jsondata[i]["3. low"];
-      json["close"] = jsondata[i]["4. close"];
-      json["x"] = count;
-      json["volume"] = jsondata[i]["5. volume"];
-      datas.push(json);
-      count++;
-    }
-   } catch (error) {
-    
-   }
+    try {
+      for (let i in jsondata) {
+        let json = {};
+        json["open"] = jsondata[i]["1. open"];
+        json["high"] = jsondata[i]["2. high"];
+        json["low"] = jsondata[i]["3. low"];
+        json["close"] = jsondata[i]["4. close"];
+        json["x"] = count;
+        json["volume"] = jsondata[i]["5. volume"];
+        datas.push(json);
+        count++;
+      }
+    } catch (error) {}
     //console.log(datas);
-   
+
     setchartConfigs({
       type: "candlestick", // The chart type
       width: "800", // Width of the chart
@@ -266,8 +263,8 @@ const [seed, setseed] = useState(1)
       dataFormat: "json", // Data type
       dataSource: {
         chart: {
-          id:"chart",
-        
+          id: "chart",
+
           theme: "fusion",
           caption: `monthly Stock Price ${element}`,
           subCaption: "Last 2 months",
@@ -301,43 +298,43 @@ const [seed, setseed] = useState(1)
           },
         ],
         dataset: [
-          { 
-            data: datas      
+          {
+            data: datas,
           },
         ],
       },
-    })
-
-  }
+    });
+  };
 
   ///todo
- 
-  const reload=(n)=>{
+
+  const reload = (n) => {
     setseed(Math.random());
     switch (n) {
-      case 1:    fetchdailydata(sessionStorage.getItem('indi'));
-      break;
-      case 2:    weeklydata(sessionStorage.getItem('indi'));
-      break;
-      case 3:    monthlydata(sessionStorage.getItem('indi'));
-      break;
-      default: fetchdailydata(sessionStorage.getItem('indi'));
+      case 1:
+        fetchdailydata(sessionStorage.getItem("indi"));
+        break;
+      case 2:
+        weeklydata(sessionStorage.getItem("indi"));
+        break;
+      case 3:
+        monthlydata(sessionStorage.getItem("indi"));
+        break;
+      default:
+        fetchdailydata(sessionStorage.getItem("indi"));
         break;
     }
     // navigate('/')
     // setTimeout(() => {
     //  navigate('/Stock')
     // }, 1);
- 
-}
+  };
   return (
     <>
       <div>
-        {sessionStorage.getItem('indi')}---{stockname}
+        {sessionStorage.getItem("indi")}---{stockname}
       </div>
 
-
-      
       <div className="container">
         <h2>global Quote data</h2>
         <div className="container">
@@ -352,17 +349,31 @@ const [seed, setseed] = useState(1)
           change percentage :{qchangepercent}
         </div>
         <div className="container align-center">
-          <button type="button"  className="btn-primary" value="update graph" onClick={()=>reload(1)}>update graph</button>
+          <button
+            type="button"
+            className="btn-primary"
+            value="update graph"
+            onClick={() => reload(1)}
+          >
+            update graph
+          </button>
         </div>
-        <div id="chart-container" >
-          <ReactFC {...chartConfigs} key={seed}/>
+        <div id="chart-container">
+          <ReactFC {...chartConfigs} key={seed} />
         </div>
-        <div className="container"> 
-        <button className="btn-primary" onClick={()=>reload(2)}>weekly</button>
-        <button className="btn-primary" onClick={()=>reload(3)}>monthly</button>
-
-         </div>
+        <div className="container">
+          <button className="btn-primary" onClick={() => reload(1)}>
+            daily
+          </button>
+          <button className="btn-primary" onClick={() => reload(2)}>
+            weekly
+          </button>
+          <button className="btn-primary" onClick={() => reload(3)}>
+            monthly
+          </button>
+        </div>
       </div>
+      <Sentiment element={sessionStorage.getItem("indi")} />
     </>
   );
 };

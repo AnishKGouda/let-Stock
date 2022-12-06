@@ -9,7 +9,10 @@ const Searchele = (props) => {
    const setname=(symbol,name)=>{
 
     setindi(symbol)
+    sessionStorage.setItem('indi',symbol)
+    sessionStorage.setItem('stockname',name)
     setstockname(name)
+    sessionStorage.setItem('searchbar',true)
    }
 
    const addtodb=async(symbol,name)=>{
