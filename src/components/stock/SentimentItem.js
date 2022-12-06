@@ -2,7 +2,9 @@ import React from 'react'
 
 const SentimentItem = (props) => {
   let {title,description,imageUrl,newsUrl,author,date,source,sentiment,sentiment_score}=props
-   let year=date.substring(0,4);
+  description=description.substring(0,200)+"..." 
+  
+  let year=date.substring(0,4);
    let month=date.substring(4,6);
    let day=date.substring(6,8);
    date=year+"-"+month+"-"+day;
