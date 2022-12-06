@@ -1,7 +1,7 @@
 import React from 'react'
 
 const SentimentItem = (props) => {
-  let {title,description,imageUrl,newsUrl,author,date,source,sentiment,sentiment_score}=props
+  let {title,description,topics,imageUrl,newsUrl,author,date,source,sentiment,sentiment_score}=props
   description=description.substring(0,200)+"..." 
   
   let year=date.substring(0,4);
@@ -25,12 +25,18 @@ const SentimentItem = (props) => {
         <div className="card-body">
             <h5 className="card-title">{title}  </h5>
             <p className="card-text">{description}</p>
-           <p> <p> sentiment---{sentiment}
+           <p>  sentiment---{sentiment}
 <br />
 sentiment   score---{sentiment_score}
 
-<br /> on {date}
-</p></p>
+<br /> on {date}</p>
+
+{topics.map((element)=>{
+  return   <p>topic --- {element['topic']}  <br />relevance score --- {element['relevance_score']} </p>
+
+})
+}
+
 
   
 <p className="card-text"><small className="text-muted">By {!author ? "Unknown" : author} </small></p>
