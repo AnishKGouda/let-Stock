@@ -1,7 +1,7 @@
 const connectToMongo = require('./db');
 const express = require('express');
 // const nodemailer = require("nodemailer");
-require("dotenv").config();
+//require("dotenv").config();
 var cors = require('cors') ;
 connectToMongo();
 const app = express()
