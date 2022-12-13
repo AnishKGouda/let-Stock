@@ -16,7 +16,7 @@ const Resetpass = () => {
  
       const handlesubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`http://localhost:3001/api/auth/reset-password`, {
+        const response = await fetch(`https://let-stock.vercel.app/api/auth/reset-password`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

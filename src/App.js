@@ -9,6 +9,7 @@ import Resetpass from "./components/Resetpass";
 import StockState from "./components/StockState";
 import Stock from "./components/stock/Stock";
 import Add from "./components/search/Add";
+import Profile from "./components/Profile";
 const App = () => {
   
 
@@ -27,6 +28,7 @@ const App = () => {
            <Route path="/search" element={<Add/>}/>  
            <Route path="/Stock" element={<Stock/>}/>
            <Route path="/Resetpass" element={<Resetpass/>}/>
+           <Route path="/Profile" element={<Profile/>}/>
           </Routes>
         </div>
       </Router>

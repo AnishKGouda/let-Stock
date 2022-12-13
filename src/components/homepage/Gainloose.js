@@ -20,7 +20,7 @@ const Gainloose = () => {
   let famous = {};
   // let stocknameobj={}
   const apikey=process.env.REACT_APP_API;
-  const host = "http://localhost:3001";
+  const host = "https://let-stock.vercel.app";
   const [stocks, setstock] = useState(famous);
   const [stocknameobj, setstocknameobj] = useState({});
 
@@ -185,10 +185,9 @@ const Gainloose = () => {
         return diffarr[b] - diffarr[a];
       })
    setdiffkey(diffarr)
-   console.log(diffkey)
-   console.log(difvalue)
+  
     difvalue=difvalue.sort((a, b) => b - a)
-    console.log(difvalue)
+   
     setdiffvalue(difvalue)
 
     setvolkey(

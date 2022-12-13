@@ -35,10 +35,12 @@ const Navbar = () => {
         <Link className="nav-link" to="/About">About</Link>
       </li>
     </ul>
-    {token?
-  <button className="btn-primary" onClick={logout}>Logout</button>
-:null
+    {token?<>
+  <button className="btn-primary " onClick={logout}>Logout</button>
+  <Link className='btn-primary mx-2 p-1' to="/Profile">profile</Link></>
+  :null
     }
+    
   </div>
 
  

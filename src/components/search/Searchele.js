@@ -17,7 +17,7 @@ const Searchele = (props) => {
 
    const addtodb=async(symbol,name)=>{
   
-    try{      const response = await fetch(`http://localhost:3001/api/stocks/addstock`, {
+    try{      const response = await fetch(`https://let-stock.vercel.app/api/stocks/addstock`, {
      method: 'POST',
      headers: {
        "auth-token": sessionStorage.getItem('token'),

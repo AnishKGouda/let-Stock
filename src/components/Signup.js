@@ -17,7 +17,7 @@ const Signup = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (creds.password === creds.cpassword) {
-      const response = await fetch(`http://localhost:3001/api/auth/signup`, {
+      const response = await fetch(`https://let-stock.vercel.app/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
