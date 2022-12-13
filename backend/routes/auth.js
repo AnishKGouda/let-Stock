@@ -62,6 +62,10 @@ try{
 
           }
         })
+
+        router.post('/try',async (req,res)=>{
+          res.json({success:true})
+        })
     router.post('/login',[
     body('password',"should be atleast 8 characters").isLength({ min: 8 }),
     body('email','enter a valid email').isEmail()] ,async (req,res)=>{
