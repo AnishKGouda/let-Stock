@@ -31,7 +31,7 @@ const sendConfirmationEmail = function({toUser}) {
     html: `
       <h3> Hello ${toUser} </h3>
       <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>
-      <p>To activate your account please follow this link: <a target="_" href="${process.env.DOMAIN}/api/auth/activate?email=${toUser}">${process.env.DOMAIN}/activate </a></p>
+      <p>To activate your account please follow this link: <a target="_" href="${process.env.DOMAIN}/api/auth/activate?email=${toUser}">/activate </a></p>
       <p>Cheers</p>
       <p>Let'Stock Application Team</p>
     `
