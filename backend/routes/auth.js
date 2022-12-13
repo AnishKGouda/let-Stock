@@ -63,7 +63,7 @@ try{
           }
         })
 
-        router.post('/try',async (req,res)=>{
+        router.get('/try',async (req,res)=>{
           res.json({success:true})
         })
     router.post('/login',[
