@@ -25,9 +25,9 @@ const fetchuserdata=async()=>{
   return (
     <>Profile
     <div className="container">pic</div>
-    <div className="container">Name :{json}</div>
+    <div className="container">Name :{json.name}</div>
     <hr />
-    <div className="container">account verified :{json}</div>
+    <div className="container">account verified :{json.verified}</div>
     </>
   )
 }
