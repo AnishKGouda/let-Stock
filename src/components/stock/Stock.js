@@ -22,7 +22,7 @@ const Stock = () => {
   //variables for data
   const context = useContext(NoteContext);
   let navigate = useNavigate();
-
+   const [showchart, setshowchart] = useState(false)
   const [seed, setseed] = useState(1);
   let { setdailydata, dailydata } = context;
   const [qhigh, setqhigh] = useState("");
@@ -313,15 +313,19 @@ const Stock = () => {
     switch (n) {
       case 1:
         fetchdailydata(sessionStorage.getItem("indi"));
+        setshowchart(true)
         break;
       case 2:
         weeklydata(sessionStorage.getItem("indi"));
+        setshowchart(true)
         break;
       case 3:
         monthlydata(sessionStorage.getItem("indi"));
+        setshowchart(true)
         break;
       default:
         fetchdailydata(sessionStorage.getItem("indi"));
+        setshowchart(true)
         break;
     }
     // navigate('/')
@@ -358,9 +362,9 @@ const Stock = () => {
             update graph
           </button>
         </div>
-        <div id="chart-container">
+      {showchart?  <div id="chart-container">
           <ReactFC {...chartConfigs} key={seed} />
-        </div>
+        </div>:null}
         <div className="container">
           <button className="btn-primary" onClick={() => reload(1)}>
             daily

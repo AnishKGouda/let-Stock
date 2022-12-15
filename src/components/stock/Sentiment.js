@@ -21,7 +21,7 @@ const Sentiment = (props) => {
           let jsondata=await response.json();
           setdata(jsondata['feed']);
           if(jsondata.Note){
-            setdata(DefaultNews['feed'])
+            setdata(DefaultNews['feed'].slice(0,6))
           }
          }
 

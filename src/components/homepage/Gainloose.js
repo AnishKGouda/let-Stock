@@ -23,7 +23,7 @@ const Gainloose = () => {
   const host = "https://let-stock.vercel.app";
   const [stocks, setstock] = useState(famous);
   const [stocknameobj, setstocknameobj] = useState({});
-
+  const [heading, setheading] = useState(false)
   //get all notes
 
   const getstocks = async () => {
@@ -196,7 +196,7 @@ const Gainloose = () => {
       })
     );
     setvolarr(volarray.sort((a, b) => b - a));
-   
+   setheading(true)
     
 
    
@@ -229,6 +229,7 @@ const Gainloose = () => {
 
       <>
         {" "}
+        {heading ?<div className="container">
         <div className="container ">
           <h3>trending by change in market</h3>
           <table>
@@ -285,6 +286,7 @@ const Gainloose = () => {
             </tbody>
           </table>
         </div>
+        </div>:null}
       </>
     </div>
   );
