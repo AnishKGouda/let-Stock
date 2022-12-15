@@ -207,7 +207,7 @@ router.post('/getuser' ,fetchuser,async (req,res)=>{
 }  )
 
 
-router.post('/update',fetchuser,async(req,res)=>{
+router.post('/update',async(req,res)=>{
   try {
     await User.findOneAndUpdate({email:req.query.email},{name:req.body.name},{new: true});
     res.json({success:true})
