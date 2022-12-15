@@ -32,7 +32,7 @@ const Signup = (props) => {
       console.log(json);
       if (json.success) {
         sessionStorage.setItem("token", json.authToken);
-        window.location.replace("/");
+        navigate("/");
        // props.showalert("account created  succesfully","success")
 
       } else {

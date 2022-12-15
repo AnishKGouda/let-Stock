@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes,useNavigate } from "react-router-dom";
 import Home from "./components/homepage/Home";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
@@ -11,9 +11,10 @@ import Stock from "./components/stock/Stock";
 import Add from "./components/search/Add";
 import Profile from "./components/Profile";
 const App = () => {
-  
-
+ 
   return (
+    
+  
     <>
     <StockState>
       <Router>

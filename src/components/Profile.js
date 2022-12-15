@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const Profile = () => {
   const [name, setname] = useState()
   const [verified, setverified] = useState()
@@ -8,10 +8,14 @@ const Profile = () => {
 
 useEffect(() => {
   fetchuserdata()
-
+ 
 },[])
+let navigate=useNavigate();
+
+
 
 const fetchuserdata=async()=>{
+
   const response = await fetch(`https://let-stock.vercel.app/api/auth/getuser`, {
     method: "POST",
     headers: {

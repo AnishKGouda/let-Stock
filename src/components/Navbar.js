@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   Link
-  ,useNavigate
+  ,useNavigate,
+  useLocation
   } from "react-router-dom";
 import { useState } from "react";
 const Navbar = () => {
   let navigate = useNavigate();
-
+  let location=useLocation();
  let token=sessionStorage.getItem('token')
-
   const logout=()=>{
     sessionStorage.removeItem('token')
    navigate('/')
@@ -39,7 +39,9 @@ const Navbar = () => {
     </ul>
     {token?<>
   <button className="btn-primary " onClick={logout}>Logout</button>
-  <Link className='btn-primary mx-2 p-1' to="/Profile">profile</Link></>
+ {location.pathname==='/Profile'?null: <Link className='btn-primary mx-2 p-1' to="/Profile">profile</Link>
+}
+  </>
   :null
     }
     

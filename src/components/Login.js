@@ -26,7 +26,7 @@ const Login = (props) => {
     const json = await response.json();
     if (json.success) {
       sessionStorage.setItem("token", json.authToken);
-      window.location.replace("/");
+     navigate("/");
 
     } else {
     }

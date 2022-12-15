@@ -218,12 +218,12 @@ const Gainloose = () => {
   return (
     <div>
       <button
-        className="btn-primary"
+        className="btn-primary float-right"
         // onMouseOver={getstocks}
         onClick={fetchcompanies}
       >
         {" "}
-        click
+      fetch data
       </button>
       {/* <button className="btn-primary" onClick={getstocks}>to fetch from db</button> */}
 
