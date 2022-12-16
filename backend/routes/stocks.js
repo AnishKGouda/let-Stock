@@ -39,5 +39,16 @@ router.post('/addstock', fetchuser, async (req, res) => {
         }
     })
 
+    router.post('/addstock', fetchuser, async (req, res) => {
+      try {
+        Stock.findOneAndDelete({title:req.body.title})
+        res.json({success:true})
+      } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+      }
+
+    })
+
 
 module.exports = router

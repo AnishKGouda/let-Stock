@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect,useState } from "react"
 import React from 'react'
 import Logger from "./Logger"
 import './homepage.css'
@@ -6,12 +6,16 @@ import Gainloose from "./Gainloose"
 import News from "./News"
 
 const Home = () => {
+const [seed, setseed] = useState()
+useEffect(() => {
+ setseed(Math.random())
+}, [])
 
   let token=sessionStorage.getItem("token")
   return (
-    <div className="homebody">
+    <div id={seed} className="homebody">
   
-   {!token?<Logger />:null}
+   {!token?<Logger  />:null}
     <div></div>
    
     <Gainloose/>

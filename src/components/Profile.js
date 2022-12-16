@@ -4,10 +4,13 @@ const Profile = () => {
   const [name, setname] = useState()
   const [verified, setverified] = useState()
   const [email, setemail] = useState()
-   const [save, setsave] = useState(false)
+  const [save, setsave] = useState(false)
+  const [stocknameobj, setstocknameobj] = useState({})
+  const [stock, setstock] = useState([])
 
 useEffect(() => {
   fetchuserdata()
+  getstocks()
  
 },[])
 let navigate=useNavigate();
@@ -55,6 +58,26 @@ let response
      
 }
   
+const getstocks = async () => {
+  const response = await fetch(`https://let-stock.vercel.app/api/stocks/fetchall`, {
+    method: "GET",
+    headers: { "auth-token": sessionStorage.getItem("token") },
+  });
+  let json = await response.json()
+  for (let i = 0; i < json.length; i++) {
+    let value = json[i];
+    let name = value["name"];
+    value = value["title"];
+    stock[i]=value
+    stocknameobj[value] = name;
+
+  }
+  //console.log(stocknameobj)
+};
+
+const handledelete=()=>{
+  
+}
   return (
     <>Profile
    <div className="container" > <div className="container">pic</div>
@@ -71,7 +94,12 @@ let response
       
       </div></div>
       <button align="center" onClick={handleedit}><i className="far fa-edit fa-lg"></i>Edit</button>
-    
+       <div className="container">
+           {stock.map((element)=>{
+            return(
+            <p>   {element} ----{stocknameobj[element]} <button onClick={handledelete}><i class="fa fa-trash" aria-hidden="true"></i></button> </p>
+            ); })}
+       </div>
     </>
   )
 }
