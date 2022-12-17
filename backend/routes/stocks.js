@@ -45,7 +45,7 @@ router.post('/addstock', fetchuser, async (req, res) => {
        
         res.json({success:true}))
        
-        stock.save()
+       await stock.save()
       } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
