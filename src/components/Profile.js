@@ -103,7 +103,7 @@ const handledelete=async(element)=>{
        <div className="container">
            {stock.map((element)=>{
             return(
-            <p>   {element} ----{stocknameobj[element]} <button onClick={()=>handledelete(element)}><i class="fa fa-trash" aria-hidden="true"></i></button> </p>
+            <p key={element}>   {element} ----{stocknameobj[element]} <button onClick={()=>handledelete(element)}><i className="fa fa-trash" aria-hidden="true"></i></button> </p>
             ); })}
        </div>
     </>
