@@ -41,8 +41,10 @@ router.post('/addstock', fetchuser, async (req, res) => {
 
     router.post('/deletestock', fetchuser, async (req, res) => {
       try {
-        Stock.findOneAndDelete({title:req.body.title})
-        res.json({success:true})
+       let query= Stock.findOneAndDelete({title:req.body.name},)
+        if(query){
+            res.json({success:true})
+        }
       } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");

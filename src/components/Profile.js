@@ -75,8 +75,14 @@ const getstocks = async () => {
   //console.log(stocknameobj)
 };
 
-const handledelete=()=>{
-  
+const handledelete=async(element)=>{
+  const response = await fetch(`https://let-stock.vercel.app/api/stocks/deletestock`, {
+    method: "POST",
+    headers: { "auth-token": sessionStorage.getItem("token") },
+    body: JSON.stringify({ name: element }),
+  });
+  let json = await response.json()
+  console.log(json)
 }
   return (
     <>Profile
@@ -97,7 +103,7 @@ const handledelete=()=>{
        <div className="container">
            {stock.map((element)=>{
             return(
-            <p>   {element} ----{stocknameobj[element]} <button onClick={handledelete}><i class="fa fa-trash" aria-hidden="true"></i></button> </p>
+            <p>   {element} ----{stocknameobj[element]} <button onClick={()=>handledelete(element)}><i class="fa fa-trash" aria-hidden="true"></i></button> </p>
             ); })}
        </div>
     </>
