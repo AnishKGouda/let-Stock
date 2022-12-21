@@ -39,19 +39,27 @@ router.post('/addstock', fetchuser, async (req, res) => {
         }
     })
 
-    router.delete('/deletestock/:id', async (req, res) => {
-      try {
-    let del=await Stock.findByIdAndDelete(req.params.id)
-  
-        res.json({success:true}
-    )
-       
-      } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal Server Error");
-      }
-
-    })
-
+       //  delete an existing Note using: POST "/api/notes/deletenote". Login required
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+    
+    try {
+     
+   
+     // Find the note and delete it
+     let note = await Stock.findById(req.params.id);
+     if(!note){return res.status(404).send("Not Found")}
+ 
+     if(note.user.toString() !== req.user.id){
+         return res.status(401).send("Not Allowed");
+     }
+ 
+     note = await Stock.findByIdAndDelete(req.params.id)
+     res.json({"success":"note has been deleted"});
+ } catch (error) {
+     console.error(error.message);
+     res.status(500).send("Internal Server Error");
+ }
+     })
+ 
 
 module.exports = router
