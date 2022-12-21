@@ -42,7 +42,7 @@ router.post('/addstock', fetchuser, async (req, res) => {
     router.delete('/deletestock/:id', fetchuser, async (req, res) => {
       try {
     let del=await Stock.findById(req.params.id)
-        await del.remove()
+        await del.delete()
         res.json({success:true}
     )
        
