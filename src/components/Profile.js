@@ -68,7 +68,7 @@ const getstocks = async () => {
     let value = json[i];
     let name = value["name"];
     value = value["title"];
-    stock[i]=value
+    stock[i]=value;
     stocknameobj[value] = name;
 
   }
