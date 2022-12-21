@@ -21,6 +21,7 @@ const fetchuserdata=async()=>{
 
   const response = await fetch(`https://let-stock.vercel.app/api/auth/getuser`, {
     method: "POST",
+    
     headers: {
       "Content-Type": "application/json",
       "auth-token":sessionStorage.getItem('token')
