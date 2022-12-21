@@ -80,10 +80,10 @@ const getstocks = async () => {
 };
 
 const handledelete=async(id)=>{
-  const response = await fetch(`https://let-stock.vercel.app/api/stocks/deletestock`, {
+  const response = await fetch(`https://let-stock.vercel.app/api/stocks/deletestock/${id}`, {
     method: "POST",
     headers: { "auth-token": sessionStorage.getItem("token") },
-    body: JSON.stringify({ id: id }),
+   
   });
   let json = await response.json()
   console.log(json)
