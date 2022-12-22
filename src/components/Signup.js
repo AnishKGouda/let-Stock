@@ -42,6 +42,48 @@ const Signup = (props) => {
       //props.showalert("passwords do not match","danger")
     }
   };
+  function handleshowpass() {
+    var x = document.getElementById("myInput");
+    var x1 = document.getElementById("confirmpass");
+    if (x.type === "password") {
+      x.type = "text";
+      x1.type="text"
+    } else {
+      x.type = "password";
+      x1.type="password"
+    }
+  }
+
+  const strengthcheck=()=>{
+    var pwd = document.getElementById("myInput");
+      var strength = document.getElementById('strength');
+      var strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+      var mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+      var enoughRegex = new RegExp("(?=.{8,}).*", "g");
+     
+      if (pwd.value.length === 0) {
+          strength.innerHTML = '';
+      } else if (false === enoughRegex.test(pwd.value)) {
+          strength.innerHTML = 'Give atleast 8 Characters';
+      } else if (strongRegex.test(pwd.value)) {
+          strength.innerHTML = '<span style="color:green">Strong!</span>';
+           pwd.style.cssText=" box-shadow: 0 1px 5px 0 green"
+      } else if (mediumRegex.test(pwd.value)) {
+          strength.innerHTML = '<span style="color:orange">Medium!A combination of special characters and symbols</span>';
+           pwd.style.cssText=" box-shadow:0 1px 5px 0  orange"
+      } else {
+          strength.innerHTML = '<span style="color:red">Weak! Use combination of uppercase letters, lowercase letters, numbers, and symbols</span>';
+          pwd.style.cssText=" box-shadow:0 1px 5px 0 red"
+      }
+  
+  }
+  const removestyle=()=>{
+    var pwd = document.getElementById("myInput");
+    pwd.style.cssText=" box-shadow:0 0 white"
+
+
+
+  }
   return (
     <>
       <form onSubmit={handleSubmit} className="container w-50 my-2">
@@ -76,22 +118,23 @@ const Signup = (props) => {
           </small>
         </div>
         <div className="form-group">
-          <label className="my-2" htmlFor="exampleInputPassword1">
-            Password
-          </label>
-          <input
-            onChange={onchange}
+          <label htmlFor="exampleInputPassword1">Password</label>
+    <input
             type="password"
+            className="form-control"
             required
             minLength={5}
-            className="form-control"
             name="password"
-            id="exampleInputPassword1"
+            id="myInput"
+            onChange={onchange}
+            onKeyUp={strengthcheck}
+            onBlur={removestyle}
             placeholder="Password"
-          />
-        </div>
+          /> <span id="strength"></span>
+        </div> 
+       
         <div className="form-group">
-          <label className="my-2" htmlFor="exampleInputPassword1">
+          <label className="my-1" htmlFor="exampleInputPassword1">
             Confirm Password
           </label>
           <input
@@ -101,9 +144,9 @@ const Signup = (props) => {
             type="password"
             name="cpassword"
             className="form-control"
-            id="exampleInputPassword2"
+            id="confirmpass"
             placeholder="Confirm Password"
-          />
+          /><input type="checkbox" className="my-2" onClick={handleshowpass}/> Show Password
         </div>
         <div>
           <button type="submit" className="btn btn-primary my-2 ">

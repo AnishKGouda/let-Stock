@@ -1,5 +1,5 @@
 import React, { useContext,useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NoteContext from "./NoteContext";
 
 
@@ -56,6 +56,14 @@ const Login = (props) => {
     }, 1000);
   }
   }
+  function handleshowpass() {
+    var x = document.getElementById("myInput");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
   return (
     <> 
     <div className="container ">
@@ -79,23 +87,30 @@ const Login = (props) => {
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputPassword1">Password</label>
-          <input
+    <input
             type="password"
             className="form-control"
             required
             minLength={5}
             name="password"
-            id="exampleInputPassword1"
+            id="myInput"
             onChange={onChange}
             placeholder="Password"
-          />
-        </div>
+          /><input type="checkbox" className="my-2" onClick={handleshowpass}/> Show Password
+        </div> 
+       
+  
+
+ 
+
 
         <button type="submit" className="btn btn-primary my-2">
           Submit
-        </button>
-      
+        </button> <br />
+        <small>Don't have an account?<Link to='/Signup'>register here</Link>
+  </small>
       </form>
+      
       <form className="float-right" >  <button className="" type="submit" onClick={handleforgot}>forgot password..?</button></form>
       </div>  </>
   );

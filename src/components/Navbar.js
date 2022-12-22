@@ -11,7 +11,7 @@ const Navbar = () => {
  let token=sessionStorage.getItem('token')
   const logout=()=>{
     sessionStorage.removeItem('token')
-   navigate('/')
+   navigate('/Login')
    //sessionStorage.clear()
 
   }
