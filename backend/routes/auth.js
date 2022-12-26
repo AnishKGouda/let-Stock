@@ -152,7 +152,7 @@ router.post('/reset-password' ,async (req,res)=>{
   const user= await User.findOne({email:req.body.email});
   if(user){
 
-  }
+  
   try {
     //verifying otp 
     if(req.body.otp===user.hash){
@@ -174,7 +174,7 @@ router.post('/reset-password' ,async (req,res)=>{
     res.status(500).json({error:"internal server error"})
 
   }
-  })
+  }})
 
 
 
@@ -207,9 +207,9 @@ router.post('/getuser' ,fetchuser,async (req,res)=>{
 }  )
 
 
-router.post('/update',async(req,res)=>{
+router.post('/update',async (req,res)=>{
   try {
-    await User.findOneAndUpdate({email:req.query.email},{name:req.body.name},{new: true});
+    await User.findOneAndUpdate({email:req.body.email},{name:req.body.name},{new:true});
     res.json({success:true})
   } catch (error) {
     console.error(error)

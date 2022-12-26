@@ -50,7 +50,7 @@ let response
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({name:Name }),
+    body: JSON.stringify({email:document.getElementById('userEmail').innerHTML,name:Name })
   });
  } catch (error) {
   
@@ -108,7 +108,7 @@ const setstate=()=>{
 }    <hr />
 
     <div key={seed} className="container" >
-      email : { email} <br></br>
+      email : <p id='userEmail'>{ email}</p> <br></br>
       account status : {verified?"verified":"not verified"}
       
       

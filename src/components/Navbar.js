@@ -5,6 +5,7 @@ import {
   useLocation
   } from "react-router-dom";
 import { useState } from "react";
+import NavBarOff from './NavBarOff';
 const Navbar = () => {
   let navigate = useNavigate();
   let location=useLocation();
@@ -19,7 +20,11 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+
+
+    <nav className="navbar navbar-expand-lg  sticky-top navbar-light bg-light">
+
+  
   <Link className="navbar-brand" to="/">Let'Stock</Link>
   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span className="navbar-toggler-icon"></span>
@@ -37,10 +42,13 @@ const Navbar = () => {
         <Link className="nav-link" to="/About">About</Link>
       </li>
     </ul>
+   
     {token?<>
-  <button className="btn-primary " onClick={logout}>Logout</button>
- {location.pathname==='/Profile'?null: <Link className='btn-primary mx-2 p-1' to="/Profile">profile</Link>
-}
+      <NavBarOff/>
+  <button className="btn-primary mx-2" onClick={logout}>Logout</button>
+ {/* {location.pathname==='/Profile'?null: <Link className='btn-primary mx-2 p-1' to="/Profile">profile</Link> */}
+
+
   </>
   :null
     }
@@ -49,6 +57,9 @@ const Navbar = () => {
 
  
 </nav>
+{/* off canvas navbar*/}
+
+
     </>
   )
 }

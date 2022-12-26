@@ -39,6 +39,7 @@ const Stock = () => {
   //for fetching data
   useEffect(() => {
     globalQuote(sessionStorage.getItem("indi"));
+    fetchglobal()
     setTimeout(() => {
       // fetchdailydata(sessionStorage.getItem('indi'));
       globalQuote(sessionStorage.getItem("indi"));
@@ -47,19 +48,20 @@ const Stock = () => {
   }, []);
   let stockname = sessionStorage.getItem("stockname");
   //
+  
   const fetchglobal = async () => {
-    let response = await fetch(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sessionStorage.getItem(
-        "indi"
-      )}&apikey=${apikey}`
-    );
-    let data = await response.json();
-    sessionStorage.setItem("gdata", JSON.stringify(data));
-  };
-
-  let checksource = sessionStorage.getItem("searchbar");
-  if (checksource) {
-    fetchglobal();
+  let checkgdata =sessionStorage.getItem("gdata");
+  if(!checkgdata) {
+      let response = await fetch(
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sessionStorage.getItem(
+          "indi"
+        )}&apikey=${apikey}`
+      );
+      let data = await response.json();
+      sessionStorage.setItem("gdata", JSON.stringify(data));
+    }else{
+      globalQuote()
+    }
   }
 
   //fetching market news and sentiment

@@ -10,6 +10,8 @@ import StockState from "./components/StockState";
 import Stock from "./components/stock/Stock";
 import Add from "./components/search/Add";
 import Profile from "./components/Profile";
+import Alert from "./Alert";
+import NavBarOff from "./components/NavBarOff";
 const App = () => {
  
   return (
@@ -18,8 +20,10 @@ const App = () => {
     <>
     <StockState>
       <Router>
+    
         <Navbar />
-
+     
+        <Alert/>
         <div >
           <Routes>
             <Route path="/" element={<Home />} />

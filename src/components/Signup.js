@@ -75,14 +75,11 @@ const Signup = (props) => {
           strength.innerHTML = '<span style="color:red">Weak! Use combination of uppercase letters, lowercase letters, numbers, and symbols</span>';
           pwd.style.cssText=" box-shadow:0 1px 5px 0 red"
       }
-  
   }
+
   const removestyle=()=>{
     var pwd = document.getElementById("myInput");
     pwd.style.cssText=" box-shadow:0 0 white"
-
-
-
   }
   return (
     <>
@@ -130,7 +127,7 @@ const Signup = (props) => {
             onKeyUp={strengthcheck}
             onBlur={removestyle}
             placeholder="Password"
-          /> <span id="strength"></span>
+          /> <small><span id="strength"></span></small>
         </div> 
        
         <div className="form-group">

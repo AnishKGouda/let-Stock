@@ -5,7 +5,7 @@ import NoteContext from "./NoteContext";
 
 const Login = (props) => {
   const context = useContext(NoteContext);
-    let { setforgotemail} =context;
+    let { setforgotemail,showalert} =context;
 
 
   const [creds, setcreds] = useState({ email: "", password: "" });
@@ -26,8 +26,9 @@ const Login = (props) => {
     const json = await response.json();
     if (json.success) {
       sessionStorage.setItem("token", json.authToken);
-     navigate("/");
-
+      
+      navigate("/");
+      showalert("login successful","success")
     } else {
     }
   };
