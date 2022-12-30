@@ -6,6 +6,7 @@ import Gainloose from "./Gainloose"
 import News from "./News"
 
 const Home = () => {
+  //dfghjk cvb
 const [seed, setseed] = useState()
 useEffect(() => {
  setseed(Math.random())
